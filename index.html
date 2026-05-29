@@ -152,7 +152,7 @@
             { id: 'roller', nama: 'Weight Roller', limit: 12000 },
             { id: 'ganda', nama: 'Kampas Ganda CVT', limit: 24000 },
             { id: 'slide', nama: 'Piece Slide Karet', limit: 15000 },
-            { id: 'tb', nama: 'Throttle Body Assy', limit: 4000, ket: '(Bersihkan)' },
+            { id: 'tb', nama: 'Throttle Body Assy', limit: 40000, ket: '(Bersihkan)' },
             { id: 'shock', nama: 'Shock Breaker', limit: 40000 },
             { id: 'cakram', nama: 'Piringan Cakram', limit: 50000 }
         ];
@@ -164,14 +164,14 @@
             year: null,
             currentKM: 0,
             historyPart: {},
-            logs: [] // Menyimpan riwayat aktivitas scan odometer berkala
+            logs: [] 
         };
 
         window.onload = function() {
             const savedData = localStorage.getItem('motocare_session');
             if (savedData) {
                 AppState = JSON.parse(savedData);
-                if(!AppState.logs) AppState.logs = []; // Mengatasi bug akun versi lama
+                if(!AppState.logs) AppState.logs = []; 
                 document.getElementById('bottom-nav').classList.remove('hidden');
                 switchTab('dashboard');
                 initDashboard();
@@ -189,7 +189,6 @@
             document.getElementById(screenId).classList.remove('hidden');
         }
 
-        // Navigasi Tab Menu Bawah
         function switchTab(tab) {
             const navDash = document.getElementById('nav-dash');
             const navHist = document.getElementById('nav-hist');
@@ -265,7 +264,7 @@
             }
         }
 
-        // Action Screen 3 (Submit Setup awal & Kirim data ke Google Sheets)
+        // FUNGSI YANG SUDAH DIPERBAIKI (TIDAK DOBEL LAGI)
         function handleChecklistSubmit() {
             DB_PART.forEach(part => {
                 const isChecked = document.getElementById(`check-${part.id}`).checked;
@@ -277,7 +276,6 @@
             tambahLogRiwayat(AppState.currentKM, "Pendaftaran Akun & Set Up Awal");
 
             // ================= PROSES KIRIM DATA KE GOOGLE SHEETS =================
-            // TARUH URL SAKTI KAMU DI BAWAH INI
             const urlSheets = "https://script.google.com/macros/s/AKfycbxBlQY0tF5lR0XxAh_Q3rddMjsoHRrD1bdZVGvUM-Yejkn6Q5sryT_PqwXrbb9d5OvRJA/exec"; 
 
             const dataKeSheets = {
@@ -288,23 +286,14 @@
                 km_awal: AppState.currentKM
             };
 
-            // Menembak data ke Google Sheets di background (User tidak akan merasa terganggu)
+            // Menembak data ke Google Sheets
             fetch(urlSheets, {
                 method: "POST",
                 body: JSON.stringify(dataKeSheets)
             })
-            .then(res => console.log("Data berhasil terkirim ke Google Sheets Master!"))
-            .catch(err => console.error("Gagal sinkronisasi database server:", err));
+            .then(res => console.log("Data berhasil terkirim ke Google Sheets!"))
+            .catch(err => console.error("Gagal sinkronisasi database:", err));
             // ======================================================================
-
-            document.getElementById('bottom-nav').classList.remove('hidden');
-            saveToStorage();
-            initDashboard();
-            switchTab('dashboard');
-        }
-
-            // Catat log pertama kali saat registrasi
-            tambahLogRiwayat(AppState.currentKM, "Pendaftaran Akun & Set Up Awal");
 
             document.getElementById('bottom-nav').classList.remove('hidden');
             saveToStorage();
@@ -377,13 +366,11 @@
             return totalKritis;
         }
 
-        // Fungsi mencatat riwayat log
         function tambahLogRiwayat(km, aktivitas) {
             const waktuSekarang = new Date();
             const formatWaktu = waktuSekarang.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + 
                                 ' - ' + waktuSekarang.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
-            // Hitung berapa banyak komponen yang wajib ganti saat log dibuat
             let totalMogokResiko = 0;
             DB_PART.forEach(part => {
                 const lastGanti = AppState.historyPart[part.id] || 0;
@@ -398,10 +385,9 @@
             };
 
             if(!AppState.logs) AppState.logs = [];
-            AppState.logs.unshift(logBaru); // Input data paling baru ke baris paling atas
+            AppState.logs.unshift(logBaru); 
         }
 
-        // Render data log ke menu halaman riwayat
         function renderHistoryList() {
             const container = document.getElementById('container-history-list');
             container.innerHTML = '';
@@ -451,10 +437,7 @@
                     const angkaKm = Math.max(...matches.map(Number));
                     if(angkaKm >= AppState.currentKM && angkaKm < 1000000) {
                         AppState.currentKM = angkaKm;
-                        
-                        // CATAT KE LOG RIWAYAT
                         tambahLogRiwayat(angkaKm, "Pengecekan Odometer via Scan Kamera AI");
-                        
                         saveToStorage();
                         initDashboard();
                         alert("Berhasil memproses! Odometer diperbarui ke " + angkaKm.toLocaleString('id-ID') + " KM. Riwayat dicatat.");
