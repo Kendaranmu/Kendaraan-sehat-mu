@@ -265,12 +265,43 @@
             }
         }
 
+        // Action Screen 3 (Submit Setup awal & Kirim data ke Google Sheets)
         function handleChecklistSubmit() {
             DB_PART.forEach(part => {
                 const isChecked = document.getElementById(`check-${part.id}`).checked;
                 const kmLast = parseInt(document.getElementById(`km-last-${part.id}`).value) || 0;
                 AppState.historyPart[part.id] = isChecked ? kmLast : 0;
             });
+
+            // Catat log pertama kali saat registrasi di HP user
+            tambahLogRiwayat(AppState.currentKM, "Pendaftaran Akun & Set Up Awal");
+
+            // ================= PROSES KIRIM DATA KE GOOGLE SHEETS =================
+            // TARUH URL SAKTI KAMU DI BAWAH INI
+            const urlSheets = "https://script.google.com/macros/s/AKfycbxBlQY0tF5lR0XxAh_Q3rddMjsoHRrD1bdZVGvUM-Yejkn6Q5sryT_PqwXrbb9d5OvRJA/exec"; 
+
+            const dataKeSheets = {
+                nama: AppState.user,
+                kontak: AppState.contact,
+                motor: AppState.motor,
+                tahun: AppState.year,
+                km_awal: AppState.currentKM
+            };
+
+            // Menembak data ke Google Sheets di background (User tidak akan merasa terganggu)
+            fetch(urlSheets, {
+                method: "POST",
+                body: JSON.stringify(dataKeSheets)
+            })
+            .then(res => console.log("Data berhasil terkirim ke Google Sheets Master!"))
+            .catch(err => console.error("Gagal sinkronisasi database server:", err));
+            // ======================================================================
+
+            document.getElementById('bottom-nav').classList.remove('hidden');
+            saveToStorage();
+            initDashboard();
+            switchTab('dashboard');
+        }
 
             // Catat log pertama kali saat registrasi
             tambahLogRiwayat(AppState.currentKM, "Pendaftaran Akun & Set Up Awal");
