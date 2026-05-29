@@ -289,9 +289,13 @@
             // Menembak data ke Google Sheets
             fetch(urlSheets, {
                 method: "POST",
+                mode: "no-cors", // Tambahkan ini agar tidak diblokir browser
+                headers: {
+                    "Content-Type": "text/plain" // Menyamarkan data agar aman dikirim
+                },
                 body: JSON.stringify(dataKeSheets)
             })
-            .then(res => console.log("Data berhasil terkirim ke Google Sheets!"))
+            .then(res => console.log("Data berhasil terkirim ke server!"))
             .catch(err => console.error("Gagal sinkronisasi database:", err));
             // ======================================================================
 
