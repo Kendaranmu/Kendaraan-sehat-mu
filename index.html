@@ -4,14 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MotoCare Monitor - Smart Odometer</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Tesseract.js OCR -->
     <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans min-h-screen pb-6">
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen pb-24">
 
-    <!-- HEADER GLOBAL -->
     <header class="bg-blue-600 text-white p-4 shadow-lg text-center sticky top-0 z-50 flex justify-between items-center">
         <div class="text-left">
             <h1 class="text-lg font-bold tracking-wider">🛠️ MotoCare</h1>
@@ -25,7 +22,6 @@
 
     <div class="max-w-md mx-auto p-4">
 
-        <!-- ================= SCREEN 1: BUAT AKUN ================= -->
         <div id="screen-auth" class="bg-slate-800 rounded-2xl p-6 shadow-xl border border-slate-700 space-y-4">
             <div class="text-center">
                 <h2 class="text-xl font-bold text-blue-400">Buat Akun Baru</h2>
@@ -44,7 +40,6 @@
             </div>
         </div>
 
-        <!-- ================= SCREEN 2: PILIH KENDARAAN ================= -->
         <div id="screen-vehicle" class="hidden bg-slate-800 rounded-2xl p-6 shadow-xl border border-slate-700 space-y-4">
             <div class="text-center">
                 <h2 class="text-xl font-bold text-blue-400">Data Kendaraan</h2>
@@ -72,7 +67,6 @@
             </div>
         </div>
 
-        <!-- ================= SCREEN 3: CHECKLIST SPARE PART AWAL ================= -->
         <div id="screen-checklist" class="hidden bg-slate-800 rounded-2xl p-5 shadow-xl border border-slate-700 space-y-4">
             <div class="text-center">
                 <h2 class="text-lg font-bold text-blue-400">Checklist Kondisi Awal</h2>
@@ -80,15 +74,12 @@
             </div>
             
             <div id="checklist-container" class="space-y-3 max-h-[380px] overflow-y-auto pr-1 text-xs">
-                <!-- Diisi otomatis oleh JavaScript -->
-            </div>
+                </div>
 
             <button onclick="handleChecklistSubmit()" class="w-full bg-emerald-600 hover:bg-emerald-500 font-bold p-3 rounded-xl transition text-sm shadow-lg shadow-emerald-600/20">Selesai & Lihat Hasil Kesehatan ➔</button>
         </div>
 
-        <!-- ================= SCREEN 4: DASHBOARD UTAMA ================= -->
         <div id="screen-dashboard" class="hidden space-y-5">
-            <!-- Info Motor -->
             <div class="bg-slate-800 rounded-2xl p-4 shadow-xl border border-slate-700 flex justify-between items-center">
                 <div>
                     <h3 id="dash-motor-title" class="font-bold text-base text-blue-400">Vario 150</h3>
@@ -100,7 +91,6 @@
                 </div>
             </div>
 
-            <!-- Kamera Scan -->
             <div class="bg-slate-800 rounded-2xl p-4 shadow-xl border border-slate-700 text-center space-y-3">
                 <p class="text-xs text-slate-300 font-medium">📸 Scan Berkala / Setelah Masuk Bengkel</p>
                 <label class="block w-full bg-blue-600/10 border border-dashed border-blue-500/40 hover:border-blue-500 rounded-xl p-3 cursor-pointer transition">
@@ -112,22 +102,43 @@
                 </div>
             </div>
 
-            <!-- Hasil Evaluasi Kesehatan Sparepart -->
             <div class="space-y-2.5">
                 <h3 class="font-bold text-sm text-slate-300 px-1">📊 Hasil Pemantauan Kendaraan:</h3>
                 <div id="container-part-status" class="space-y-2">
-                    <!-- Hasil akhir dirender di sini -->
-                </div>
+                    </div>
             </div>
+        </div>
 
-            <!-- Tombol Reset Prototype -->
-            <button onclick="resetApp()" class="w-full bg-slate-800/50 hover:bg-red-900/30 text-slate-500 hover:text-red-400 border border-slate-700 text-2xs p-2 rounded-xl transition">Reset Data & Mulai dari Awal</button>
+        <div id="screen-history" class="hidden space-y-4">
+            <div class="flex justify-between items-center px-1">
+                <h3 class="font-bold text-lg text-slate-300">⏳ Riwayat Pengecekan</h3>
+                <button onclick="clearHistory()" class="text-3xs text-red-400 hover:underline bg-red-950/20 border border-red-900/30 px-2 py-1 rounded">Hapus Log</button>
+            </div>
+            
+            <div id="container-history-list" class="space-y-3">
+                </div>
+            
+            <div class="pt-6">
+                <button onclick="resetApp()" class="w-full bg-slate-800/50 hover:bg-red-900/30 text-slate-500 hover:text-red-400 border border-slate-700 text-2xs p-3 rounded-xl transition">Reset Data Akun & Mulai dari Awal</button>
+            </div>
         </div>
 
     </div>
 
+    <nav id="bottom-nav" class="hidden fixed bottom-0 left-0 right-0 bg-slate-800/95 border-t border-slate-700 p-2 backdrop-blur z-50">
+        <div class="max-w-md mx-auto grid grid-cols-2 gap-2 text-center">
+            <button id="nav-dash" onclick="switchTab('dashboard')" class="flex flex-col items-center p-2 text-blue-400 transition">
+                <span class="text-xl">📊</span>
+                <span class="text-3xs font-semibold mt-1">Dashboard</span>
+            </button>
+            <button id="nav-hist" onclick="switchTab('history')" class="flex flex-col items-center p-2 text-slate-400 hover:text-slate-200 transition">
+                <span class="text-xl">⏳</span>
+                <span class="text-3xs font-semibold mt-1">Riwayat</span>
+            </button>
+        </div>
+    </nav>
+
     <script>
-        // Data Struktur Komponen
         const DB_PART = [
             { id: 'oli', nama: 'Oli Mesin', limit: 1500 },
             { id: 'kampas', nama: 'Kampas Rem', limit: 10000 },
@@ -146,22 +157,23 @@
             { id: 'cakram', nama: 'Piringan Cakram', limit: 50000 }
         ];
 
-        // Object Global Data Aplikasi User
         let AppState = {
             user: null,
             contact: null,
             motor: null,
             year: null,
             currentKM: 0,
-            historyPart: {} // Menyimpan KM ganti terakhir tiap part
+            historyPart: {},
+            logs: [] // Menyimpan riwayat aktivitas scan odometer berkala
         };
 
-        // Cek apakah data sudah ada di memory HP biar gak ngulang login
         window.onload = function() {
             const savedData = localStorage.getItem('motocare_session');
             if (savedData) {
                 AppState = JSON.parse(savedData);
-                showScreen('screen-dashboard');
+                if(!AppState.logs) AppState.logs = []; // Mengatasi bug akun versi lama
+                document.getElementById('bottom-nav').classList.remove('hidden');
+                switchTab('dashboard');
                 initDashboard();
             } else {
                 showScreen('screen-auth');
@@ -173,10 +185,28 @@
             document.getElementById('screen-vehicle').classList.add('hidden');
             document.getElementById('screen-checklist').classList.add('hidden');
             document.getElementById('screen-dashboard').classList.add('hidden');
+            document.getElementById('screen-history').classList.add('hidden');
             document.getElementById(screenId).classList.remove('hidden');
         }
 
-        // Action Screen 1
+        // Navigasi Tab Menu Bawah
+        function switchTab(tab) {
+            const navDash = document.getElementById('nav-dash');
+            const navHist = document.getElementById('nav-hist');
+
+            if(tab === 'dashboard') {
+                showScreen('screen-dashboard');
+                navDash.className = "flex flex-col items-center p-2 text-blue-400 font-bold transition";
+                navHist.className = "flex flex-col items-center p-2 text-slate-400 transition";
+                hitungKesehatanAll();
+            } else if(tab === 'history') {
+                showScreen('screen-history');
+                navDash.className = "flex flex-col items-center p-2 text-slate-400 transition";
+                navHist.className = "flex flex-col items-center p-2 text-blue-400 font-bold transition";
+                renderHistoryList();
+            }
+        }
+
         function handleAuth() {
             const name = document.getElementById('reg-name').value;
             const contact = document.getElementById('reg-contact').value;
@@ -186,7 +216,6 @@
             showScreen('screen-vehicle');
         }
 
-        // Action Screen 2
         function handleVehicle() {
             const type = document.getElementById('motor-type').value;
             const year = document.getElementById('motor-year').value;
@@ -202,7 +231,6 @@
             showScreen('screen-checklist');
         }
 
-        // Membuat Form Checklist Dinamis
         function generateChecklistForm() {
             const container = document.getElementById('checklist-container');
             container.innerHTML = '';
@@ -217,7 +245,7 @@
                         <div id="input-group-${part.id}" class="hidden pl-6 space-y-1.5 border-l border-slate-700">
                             <p class="text-3xs text-slate-400">Pilih patokan kapan terakhir kali diganti:</p>
                             <div class="flex space-x-2">
-                                <input type="number" id="km-last-${part.id}" placeholder="Pada KM berapa (Misal: 12000)" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-2xs text-amber-400">
+                                <input type="number" id="km-last-${part.id}" placeholder="Pada KM berapa" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-2xs text-amber-400">
                             </div>
                         </div>
                     </div>
@@ -230,7 +258,6 @@
             const group = document.getElementById(`input-group-${id}`);
             if(isChecked) {
                 group.classList.remove('hidden');
-                // Auto isi dengan KM saat ini sebagai default biar user gak ribet ketik klo baru ganti
                 document.getElementById(`km-last-${id}`).value = AppState.currentKM;
             } else {
                 group.classList.add('hidden');
@@ -238,35 +265,27 @@
             }
         }
 
-        // Action Screen 3 (Submit Setup awal)
         function handleChecklistSubmit() {
             DB_PART.forEach(part => {
                 const isChecked = document.getElementById(`check-${part.id}`).checked;
                 const kmLast = parseInt(document.getElementById(`km-last-${part.id}`).value) || 0;
-
-                if (isChecked) {
-                    AppState.historyPart[part.id] = kmLast;
-                } else {
-                    // Jika belum pernah diganti, kita asumsikan diganti di KM 0 (dari baru bawaan pabrik)
-                    AppState.historyPart[part.id] = 0;
-                }
+                AppState.historyPart[part.id] = isChecked ? kmLast : 0;
             });
 
-            // Simpan permanen ke memory lokal browser HP
-            localStorage.setItem('motocare_session', JSON.stringify(AppState));
-            
+            // Catat log pertama kali saat registrasi
+            tambahLogRiwayat(AppState.currentKM, "Pendaftaran Akun & Set Up Awal");
+
+            document.getElementById('bottom-nav').classList.remove('hidden');
+            saveToStorage();
             initDashboard();
-            showScreen('screen-dashboard');
+            switchTab('dashboard');
         }
 
-        // Load Tampilan Akhir (Dashboard Utama)
         function initDashboard() {
-            // Update Header badge
             document.getElementById('user-badge').classList.remove('hidden');
             document.getElementById('badge-username').innerText = "Hi, " + AppState.user;
             document.getElementById('badge-motor').innerText = AppState.motor;
 
-            // Update Dash Text
             document.getElementById('dash-motor-title').innerText = AppState.motor;
             document.getElementById('dash-motor-sub').innerText = "Tahun Perakitan: " + AppState.year;
             document.getElementById('km-saat-ini').innerText = AppState.currentKM.toLocaleString('id-ID') + " KM";
@@ -274,10 +293,10 @@
             hitungKesehatanAll();
         }
 
-        // Logika Hitung Kesehatan Akhir
         function hitungKesehatanAll() {
             const container = document.getElementById('container-part-status');
             container.innerHTML = '';
+            let totalKritis = 0;
 
             DB_PART.forEach(part => {
                 const lastGanti = AppState.historyPart[part.id] || 0;
@@ -286,9 +305,9 @@
 
                 let statusHtml = '';
                 let borderClass = 'border-l-slate-700';
-                let bgClass = 'bg-slate-800';
 
                 if (sisa <= 0) {
+                    totalKritis++;
                     borderClass = 'border-l-4 border-l-red-500';
                     statusHtml = `
                         <div class="text-right">
@@ -315,18 +334,78 @@
                 }
 
                 container.innerHTML += `
-                    <div class="${bgClass} rounded-xl p-3 border border-slate-700/70 flex justify-between items-center shadow-sm ${borderClass}">
+                    <div class="bg-slate-800 rounded-xl p-3 border border-slate-700/70 flex justify-between items-center shadow-sm ${borderClass}">
                         <div>
                             <h4 class="font-bold text-xs text-slate-200">${part.nama}</h4>
-                            <p class="text-3xs text-slate-400">Interval ganti tiap ${part.limit.toLocaleString('id-ID')} KM (Terakhir di KM: ${lastGanti.toLocaleString('id-ID')})</p>
+                            <p class="text-3xs text-slate-400">Interval ${part.limit.toLocaleString('id-ID')} KM (Terakhir: KM ${lastGanti.toLocaleString('id-ID')})</p>
                         </div>
                         ${statusHtml}
                     </div>
                 `;
             });
+            return totalKritis;
         }
 
-        // Proses Scan Foto Odometer di Dashboard
+        // Fungsi mencatat riwayat log
+        function tambahLogRiwayat(km, aktivitas) {
+            const waktuSekarang = new Date();
+            const formatWaktu = waktuSekarang.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + 
+                                ' - ' + waktuSekarang.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+            // Hitung berapa banyak komponen yang wajib ganti saat log dibuat
+            let totalMogokResiko = 0;
+            DB_PART.forEach(part => {
+                const lastGanti = AppState.historyPart[part.id] || 0;
+                if ((km - lastGanti) >= part.limit) totalMogokResiko++;
+            });
+
+            const logBaru = {
+                waktu: formatWaktu,
+                kmValue: km,
+                keterangan: aktivitas,
+                kritisCount: totalMogokResiko
+            };
+
+            if(!AppState.logs) AppState.logs = [];
+            AppState.logs.unshift(logBaru); // Input data paling baru ke baris paling atas
+        }
+
+        // Render data log ke menu halaman riwayat
+        function renderHistoryList() {
+            const container = document.getElementById('container-history-list');
+            container.innerHTML = '';
+
+            if(!AppState.logs || AppState.logs.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 text-center py-8">Belum ada riwayat pengecekan.</p>`;
+                return;
+            }
+
+            AppState.logs.forEach(log => {
+                let badgeKesehatan = log.kritisCount > 0 ? 
+                    `<span class="bg-red-500/10 text-red-400 border border-red-900/40 text-3xs px-2 py-0.5 rounded-full font-bold">⚠️ ${log.kritisCount} Part Kritis</span>` : 
+                    `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-900/40 text-3xs px-2 py-0.5 rounded-full font-medium">✨ Motor Sehat</span>`;
+
+                container.innerHTML += `
+                    <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-3.5 shadow-sm space-y-2">
+                        <div class="flex justify-between items-center text-3xs text-slate-400">
+                            <span>📅 ${log.waktu} Wib</span>
+                            ${badgeKesehatan}
+                        </div>
+                        <div class="flex justify-between items-end pt-1">
+                            <div>
+                                <p class="text-2xs text-slate-400">Aktivitas sistem:</p>
+                                <p class="text-xs font-bold text-slate-200">${log.keterangan}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-3xs text-slate-500 uppercase tracking-wider">Odometer</p>
+                                <p class="font-mono text-sm font-bold text-amber-400">${log.kmValue.toLocaleString('id-ID')} KM</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
         function prosesFoto(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -341,20 +420,35 @@
                     const angkaKm = Math.max(...matches.map(Number));
                     if(angkaKm >= AppState.currentKM && angkaKm < 1000000) {
                         AppState.currentKM = angkaKm;
-                        // Simpan update km baru ke memory
-                        localStorage.setItem('motocare_session', JSON.stringify(AppState));
+                        
+                        // CATAT KE LOG RIWAYAT
+                        tambahLogRiwayat(angkaKm, "Pengecekan Odometer via Scan Kamera AI");
+                        
+                        saveToStorage();
                         initDashboard();
-                        alert("Berhasil memperbarui odometer: " + angkaKm.toLocaleString('id-ID') + " KM");
+                        alert("Berhasil memproses! Odometer diperbarui ke " + angkaKm.toLocaleString('id-ID') + " KM. Riwayat dicatat.");
                     } else {
-                        alert("Angka KM terdeteksi (" + angkaKm + ") lebih rendah dari KM saat ini (" + AppState.currentKM + "). Scan foto yang lebih baru!");
+                        alert("Angka KM terdeteksi (" + angkaKm + ") lebih rendah dari KM saat ini (" + AppState.currentKM + "). Gunakan foto terbaru!");
                     }
                 } else {
-                    alert("Gagal membaca angka odometer. Pastikan foto jelas.");
+                    alert("Gagal mendeteksi angka. Pastikan foto speedometer terpusat dan terang.");
                 }
             }).catch(err => {
                 document.getElementById('loading').classList.add('hidden');
                 alert("Gagal memproses gambar.");
             });
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('motocare_session', JSON.stringify(AppState));
+        }
+
+        function clearHistory() {
+            if(confirm("Hapus semua daftar riwayat log scan?")) {
+                AppState.logs = [];
+                saveToStorage();
+                renderHistoryList();
+            }
         }
 
         function resetApp() {
